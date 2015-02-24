@@ -474,7 +474,10 @@ class PhpcsCommand():
                 self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
-                self.error_lines[line] = error.get_message()
+                output_message = '[' + shell_command + '] ' + error.get_message()
+                if line not in self.error_lines:
+                    self.error_lines[line] = []
+                self.error_lines[line].append(output_message)
 
             if len(self.error_list) > 0:
                 icon = icon if pref.phpcs_show_gutter_marks else ''
