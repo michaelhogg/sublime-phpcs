@@ -442,7 +442,7 @@ class PhpcsCommand():
         for region in self.shell_commands:
             self.view.erase_regions(region)
 
-    def set_status_bar(self):
+    def set_output_panel(self):
         if not pref.phpcs_show_errors_in_status:
             return
 
@@ -540,7 +540,7 @@ class PhpcsCommand():
             self.view.sel().clear()
             self.view.sel().add(sublime.Region(pt))
             self.view.show(pt)
-            self.set_status_bar()
+            self.set_output_panel()
 
     def get_line_errors(self, line):
         if not line + 1 in self.error_lines:
@@ -747,7 +747,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
-            cmd.set_status_bar()
+            cmd.set_output_panel()
 
     def on_pre_save(self, view):
         """ Project based settings, currently able to see an API based way of doing this! """
