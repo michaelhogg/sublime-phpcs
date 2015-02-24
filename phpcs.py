@@ -439,6 +439,7 @@ class PhpcsCommand():
         sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):
+        self.error_lines = {}
         for region in self.shell_commands:
             self.view.erase_regions(region)
 
