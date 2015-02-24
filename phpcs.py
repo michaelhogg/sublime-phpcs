@@ -451,10 +451,18 @@ class PhpcsCommand():
 
         line = self.view.rowcol(self.view.sel()[0].end())[0]
         errors = self.get_line_errors(line)
-        if errors:
-            self.view.set_status('Phpcs', errors)
+
+        if errors == False:
+            self.view.window().run_command('hide_panel', {'panel': 'output.phpcs'})
         else:
-            self.view.erase_status('Phpcs')
+            op_view = self.view.window().get_output_panel('phpcs')
+            op_edit = op_view.begin_edit()
+            op_view.set_read_only(False)
+            op_view.erase(op_edit, sublime.Region(0, op_view.size()))
+            op_view.insert(op_edit, 0, '\n'.join(errors))
+            op_view.end_edit(op_edit)
+            op_view.set_read_only(True)
+            self.view.window().run_command('show_panel', {'panel': 'output.phpcs'})
 
     def generate(self):
         self.error_list = []
