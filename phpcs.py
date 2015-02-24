@@ -450,7 +450,7 @@ class PhpcsCommand():
             return
 
         line = self.view.rowcol(self.view.sel()[0].end())[0]
-        errors = self.get_errors(line)
+        errors = self.get_line_errors(line)
         if errors:
             self.view.set_status('Phpcs', errors)
         else:
@@ -531,7 +531,7 @@ class PhpcsCommand():
             self.view.show(pt)
             self.set_status_bar()
 
-    def get_errors(self, line):
+    def get_line_errors(self, line):
         if not line + 1 in self.error_lines:
             return False
 
