@@ -61,7 +61,7 @@
 
     // It seems python/sublime cannot always find the phpcs application
     // If empty, then use PATH version of phpcs, else use the set value
-    "phpcs_executable_path": "",
+    "phpcs_executable_path": "Library/Application Support/Sublime Text 2/Packages/Phpcs/vendor/bin/phpcs",
 
     // Additional arguments you can specify into the application
     //
@@ -122,7 +122,7 @@
 
     // It seems python/sublime cannot always find the phpmd application
     // If empty, then use PATH version of phpmd, else use the set value
-    "phpmd_executable_path": "",
+    "phpmd_executable_path": "Library/Application Support/Sublime Text 2/Packages/Phpcs/vendor/bin/phpmd",
 
     // Additional arguments you can specify into the application
     //

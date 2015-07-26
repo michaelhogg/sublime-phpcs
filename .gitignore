@@ -1,1 +1,3 @@
-phpcs.pyc
+/composer.phar
+/phpcs.pyc
+/vendor
