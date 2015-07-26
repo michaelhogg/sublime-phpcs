@@ -439,10 +439,11 @@ class PhpcsCommand():
         sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):
+        self.error_lines = {}
         for region in self.shell_commands:
             self.view.erase_regions(region)
 
-    def set_status_bar(self):
+    def set_output_panel(self):
         if not pref.phpcs_show_errors_in_status:
             return
 
@@ -450,11 +451,19 @@ class PhpcsCommand():
             return
 
         line = self.view.rowcol(self.view.sel()[0].end())[0]
-        errors = self.get_errors(line)
-        if errors:
-            self.view.set_status('Phpcs', errors)
+        errors = self.get_line_errors(line)
+
+        if errors == False:
+            self.view.window().run_command('hide_panel', {'panel': 'output.phpcs'})
         else:
-            self.view.erase_status('Phpcs')
+            op_view = self.view.window().get_output_panel('phpcs')
+            op_edit = op_view.begin_edit()
+            op_view.set_read_only(False)
+            op_view.erase(op_edit, sublime.Region(0, op_view.size()))
+            op_view.insert(op_edit, 0, '\n'.join(errors))
+            op_view.end_edit(op_edit)
+            op_view.set_read_only(True)
+            self.view.window().run_command('show_panel', {'panel': 'output.phpcs'})
 
     def generate(self):
         self.error_list = []
@@ -474,7 +483,10 @@ class PhpcsCommand():
                 self.error_list.append('(' + str(line) + ') ' + error.get_message())
                 error.set_point(pt)
                 self.report.append(error)
-                self.error_lines[line] = error.get_message()
+                output_message = '[' + shell_command + '] ' + error.get_message()
+                if line not in self.error_lines:
+                    self.error_lines[line] = []
+                self.error_lines[line].append(output_message)
 
             if len(self.error_list) > 0:
                 icon = icon if pref.phpcs_show_gutter_marks else ''
@@ -529,9 +541,9 @@ class PhpcsCommand():
             self.view.sel().clear()
             self.view.sel().add(sublime.Region(pt))
             self.view.show(pt)
-            self.set_status_bar()
+            self.set_output_panel()
 
-    def get_errors(self, line):
+    def get_line_errors(self, line):
         if not line + 1 in self.error_lines:
             return False
 
@@ -736,7 +748,7 @@ class PhpcsEventListener(sublime_plugin.EventListener):
 
         cmd = PhpcsCommand.instance(view, False)
         if isinstance(cmd, PhpcsCommand):
-            cmd.set_status_bar()
+            cmd.set_output_panel()
 
     def on_pre_save(self, view):
         """ Project based settings, currently able to see an API based way of doing this! """
