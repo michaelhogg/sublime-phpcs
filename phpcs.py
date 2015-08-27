@@ -439,6 +439,7 @@ class PhpcsCommand():
         sublime.set_timeout(self.generate, 0)
 
     def clear_sniffer_marks(self):
+        self.view.window().run_command('hide_panel', {'panel': 'output.phpcs'})
         self.error_lines = {}
         for region in self.shell_commands:
             self.view.erase_regions(region)
@@ -453,9 +454,7 @@ class PhpcsCommand():
         line = self.view.rowcol(self.view.sel()[0].end())[0]
         errors = self.get_line_errors(line)
 
-        if errors == False:
-            self.view.window().run_command('hide_panel', {'panel': 'output.phpcs'})
-        else:
+        if errors != False:
             op_view = self.view.window().get_output_panel('phpcs')
             op_edit = op_view.begin_edit()
             op_view.set_read_only(False)
