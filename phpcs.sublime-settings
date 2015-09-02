@@ -105,7 +105,7 @@
 
     // It seems python/sublime cannot always find the php application
     // If empty, then use PATH version of php, else use the set value
-    "phpcs_php_path": "",
+    "phpcs_php_path": "/opt/local/bin/php",
 
     // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
     "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)",
