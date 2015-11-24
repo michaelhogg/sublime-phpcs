@@ -496,6 +496,11 @@ class PhpcsCommand():
                         pref.phpcs_icon_scope_color = "phpcs"
                     self.view.add_regions(shell_command, region_set, pref.phpcs_icon_scope_color, icon, outline)
 
+        if len(self.error_list) == 0:
+            formatted_time              = time.strftime('%I:%M:%S %p').lstrip('0').lower()
+            emoji_green_box_white_check = u'\u2705'
+            sublime.status_message('PHP linters @ ' + formatted_time + ' ' + emoji_green_box_white_check)
+
         if pref.phpcs_show_quick_panel == True:
             # Skip showing the errors if we ran on save, and the option isn't set.
             if self.event == 'on_save' and not pref.phpcs_show_errors_on_save:
